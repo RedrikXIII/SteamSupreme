@@ -1,0 +1,15 @@
+﻿
+<div class="card-outer">
+	<div class="card-image">
+		<img src="@Game.Image" height="200" />
+	</div>
+	<div class="card-text">
+		<h1>@Game.Title</h1>
+		<h5>Price: @Game.Price UAH</h5>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public GameModel Game { get; set; }
+}

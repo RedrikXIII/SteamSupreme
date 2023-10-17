@@ -1,0 +1,112 @@
+﻿@page "/authorize"
+
+@if (User != null)
+{
+	<div>
+		<p>@User.Account.FirstName</p>
+		<p>@User.Money</p>
+		<button @onclick="AccountOut">Log out</button>
+	</div>
+
+	<div style="display:flex; flex-wrap:wrap">
+		@foreach (var order in User.GameOrders)
+		{
+			<GameComponent Game="order.Game"></GameComponent>
+		}
+	</div>
+
+	<hr>
+}
+else
+{
+	<EditForm Model="Account" OnSubmit="OnSubmit">
+		<div>
+			<label>Email</label>
+			<input @bind-value="Account.Email" />
+		</div>
+		<div>
+			<label>Password</label>
+			<input @bind-value="Account.Password" />
+		</div>
+		<button type="submit">Send</button>
+	</EditForm>
+}
+
+<div style="display:flex; flex-wrap:wrap">
+
+	@foreach (var game in ShowGames)
+	{
+		<GameComponent Game="game"></GameComponent>
+	}
+</div>
+
+
+@code {
+
+	public AccountModel Account { get; set; }
+	public static UserModel? User { get; set; }
+
+	public List<GameModel> AllGames { get; set; }
+	public List<GameModel> ShowGames { get; set; }
+
+
+	public Authorize()
+	{
+		Account = new AccountModel();
+		Account.Email = "arsenii.rykov@gmail.com";
+		Account.Password = "123";
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		using (EntityDatabase db = new EntityDatabase())
+		{
+			AllGames = db.Games.ToList();
+			ShowGames = AllGames;
+		}
+	}
+
+	public void OnSubmit(EditContext editContext)
+	{
+		// var valid = editContext.Validate;
+
+		// using (EntityDatabase db = new EntityDatabase())
+		// {
+		// 	var account = db.Accounts
+		// 	.Include(a => a.User)
+		// 		.ThenInclude(u => u.GameOrders)
+		// 			.ThenInclude(o => o.Game)
+		// 	.FirstOrDefault(a =>
+		// 		a.Email == Account.Email &&
+		// 		a.Password == Account.Password);
+
+		// 	if (account == null)
+		// 		return;
+
+		// 	User = account.User;
+
+		// 	var userGames = from order in User.GameOrders
+		// 					from game in AllGames
+		// 					where order.Game.Id == game.Id
+		// 					select game;
+
+		// 	ShowGames = AllGames.Except(userGames).ToList();
+		// }
+	}
+
+	public void AccountOut()
+	{
+		using (EntityDatabase db = new EntityDatabase())
+		{
+			User = null;
+			Account = new AccountModel();
+			ShowGames = AllGames;
+
+		};
+	}
+
+	protected override void OnAfterRender(bool firstRender)
+	{
+		
+	}
+}

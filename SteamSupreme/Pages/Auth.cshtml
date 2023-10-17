@@ -1,0 +1,33 @@
+﻿@* @page "/auth"
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@inject SignInManager<IdentityUser> SignInManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+	
+}
+else
+{
+	
+}
+
+@functions 
+{
+	public async Task Test()
+	{
+		var claims = new List<Claim>()
+		{
+			new Claim(ClaimTypes.Name, "Arsenii"),
+			new Claim(ClaimTypes.Role, "Admin"),
+			new Claim(ClaimTypes.Authentication, "ID")
+		};
+
+		var user = new IdentityUser()
+		{
+			Id = "123321"
+		};
+
+		await SignInManager.SignInAsync(user, true);
+	}
+} *@

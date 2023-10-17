@@ -1,0 +1,33 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current users: @users.Count</p>
+
+@foreach (var user in users)
+{
+    <div class="user-table">
+        <span>@user</span>
+        <button @onclick="() => Delete(user)" class="btn-danger">Delete</button>
+    </div>
+}
+
+<input @bind="name"/>
+<button class="btn btn-primary" @onclick="Add">Click me</button>
+
+@code {
+    private string name = string.Empty;
+    private List<string> users = new List<string>();
+
+    private void Add()
+    {
+        users.Add(name);
+        name = string.Empty;
+    }
+    private void Delete(string user)
+    {
+        users.Remove(user);
+    }
+}

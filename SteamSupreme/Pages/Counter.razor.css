@@ -1,0 +1,9 @@
+﻿.user-table {
+    display: flex;
+    max-width: 200px;
+}
+
+.user-table button {
+    margin: auto;
+    margin-right: 30px;
+}
